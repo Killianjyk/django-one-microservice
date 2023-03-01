@@ -21,8 +21,8 @@ def todo_list_create(request):
     if request.method == "POST":
         form = TodosForm(request.POST)
         if form.is_valid():
-            TodoList = form.save()
-            return redirect("todo_list_list")
+            Todo_List = form.save()
+            return redirect("todo_list_detail", id=Todo_List.id)
     else:
         form = TodosForm()
 
@@ -30,3 +30,20 @@ def todo_list_create(request):
         "form": form
     }
     return render(request, "todos/create.html", context)
+
+def todo_list_update(request, id=id):
+    edit = get_object_or_404(TodoList, id=id)
+
+    if request.method == "POST":
+        form = TodosForm(request.POST, instance=edit)
+        if form.is_valid():
+            edit = form.save()
+            return redirect("todo_list_detail", id=edit.id)
+
+    else:
+        form = TodosForm(instance=edit)
+
+    context = {
+        "form" : form
+    }
+    return render(request, "todos/update.html", context)
